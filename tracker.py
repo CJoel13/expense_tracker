@@ -110,10 +110,13 @@ def print_expenses_indiv(expenses):
         print('----')
 
 def print_expense_single_line(expenses):
+    index = 1
     for exp in expenses:
+        print(index, ". ", sep='', end='')
         print("$", exp['amount'], " - ", end='')
         print(exp['category'], " ", end='')
         print("(", exp['date'], ")")
+        index += 1
 
 def print_summary():
     print("Summary:\n---------")
@@ -137,6 +140,7 @@ def print_summary():
         print("Top 3 expenses:")
         # Print top 3 expenses
         print_expense_single_line(sorted_list_of_expenses[:3])
+        print("")
 
     else:
         print("Top ", expenses_length, " expenses")
@@ -161,20 +165,38 @@ def test_register_expense():
 def test_list_of_expenses():
     list_of_expenses.append({"category": "Health", "amount": 123.2, "date": "2021-11-11"})
     list_of_expenses.append({"category": "Food", "amount": 5.23, "date": "2021-12-12"})
-    # list_of_expenses.append({"category": "Services", "amount": 20, "date": "2025-11-16"})
-
-test_list_of_expenses()
-print_summary()
-exit("Quiting...")
+    list_of_expenses.append({"category": "Services", "amount": 20, "date": "2025-11-16"})
 
 
-def remove_expense():
-    print("Removing expense:")
+def remove_expense(retries=3):
+    clear_screen()
+    option = 0
+    if len(list_of_expenses) > 0:
+        print("Removing expense:")
+        print_expense_single_line(list_of_expenses)
+        print("----")
+        option_range = "(1 - " + str(len(list_of_expenses)) + ")"
+        while True:
+            try:
+                print(f"Select expense to delete {option_range}: ", sep='', end='')
+                option = int(input())
+                if option < 1 or option > len(list_of_expenses):
+                    raise ValueError(f"Invalid option, select an option between {option_range}")
+                break
+            except ValueError as e:
+                print(e)
+                retries -= 1
+                if retries <= 0:
+                    exit("Retries exceeded, quiting...")
+        print("Option selected: ", option)
+        del list_of_expenses[option - 1]
+        print("Updated list: ")
+        print_expense_single_line(list_of_expenses)
 
+    else:
+        print("Empty expense list, first add an expense")
 
 option = display_menu()
-
-
 
 while option != 4:
     match option:
