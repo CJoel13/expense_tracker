@@ -110,13 +110,11 @@ def print_expenses_indiv(expenses):
         print('----')
 
 def print_expense_single_line(expenses):
-    index = 1
-    for exp in expenses:
-        print(index, ". ", sep='', end='')
+    for i, exp in enumerate(expenses):
+        print(i+1, ". ", sep='', end='')
         print("$", exp['amount'], " - ", end='')
         print(exp['category'], " ", end='')
         print("(", exp['date'], ")")
-        index += 1
 
 def print_summary():
     print("Summary:\n---------")
